@@ -19,7 +19,7 @@ def chambres_disponibles():
   return jsonify([chambre.format for chambre in chambres])
 
 @main.route('/api/reservations', methods=['POST'])
-def reservations():
+def creer_reservations():
   data = request.get_json()
 
   id_client, id_chambre, date_arrivee, date_depart = data.get('id_client'), data.get('id_chambre'), data.get('date_arrivee'), data.get('date_depart')
@@ -76,7 +76,7 @@ def annuler_reservation(id):
   return send_success("Réservation annulée avec succès.")
 
 @main.route('/api/chambres', methods=['POST'])
-def chambres():
+def creer_chambre():
   data = request.get_json()
 
   numero, type, prix = data.get('numero'), data.get('type'), data.get('prix')
@@ -105,7 +105,7 @@ def chambres():
   return send_success("Chambre ajoutée avec succès.")
 
 @main.route('/api/chambres/<int:id>', methods=['PUT','DELETE'])
-def modifier_chambre(id):
+def chambre(id):
   if request.method == 'DELETE':
     chambre = Chambre.query.get(id)
 
@@ -127,6 +127,25 @@ def modifier_chambre(id):
     return send_error(
     "Chambre introuvable."
     ), 404
+  
+  numero, type, prix = data.get('numero'), data.get('type'), data.get('prix')
+
+  if numero is None or type is None or prix is None:
+    return send_error(
+      "numero, type et prix requis."
+    ), 400
+  
+  types = [enum_type.name for enum_type in Type]
+
+  if type not in types:
+    return send_error(
+    f"Type invalide. Les types valides sont: {', '.join(types)}"
+    ), 400
+
+  if Chambre.query.filter_by(numero=numero).first():
+    return send_error(
+    "Ce numéro de chambre est déjà pris."
+    ), 409
 
   chambre.numero, chambre.type, chambre.prix = data.get('numero'), data.get('type'), data.get('prix')
   db.session.commit()
