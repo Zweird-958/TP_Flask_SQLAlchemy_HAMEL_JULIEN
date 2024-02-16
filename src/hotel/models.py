@@ -5,6 +5,7 @@ from .database import db
 class Status(enum.Enum):
   en_attente = 'en attente'
   confirmee = 'confirmée'
+  annulee = 'annulée'
 
 class Type(enum.Enum):
   simple = 'simple'
