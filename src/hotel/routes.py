@@ -86,6 +86,11 @@ def chambres():
       "numero, type et prix requis."
     ), 400
   
+  if Chambre.query.filter_by(numero=numero).first():
+    return send_error(
+    "Chambre déjà existante."
+    ), 400
+  
   chambre = Chambre(numero=numero, type=type, prix=prix)
   db.session.add(chambre)
   db.session.commit()
