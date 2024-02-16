@@ -1,5 +1,5 @@
 from flask import jsonify, Blueprint, request
-from .models import Reservation, Chambre, Client, Status
+from .models import Reservation, Chambre, Client, Status, Type
 from .database import db
 from sqlalchemy import and_
 from .utils import send_error, send_success
@@ -84,6 +84,13 @@ def chambres():
   if numero is None or type is None or prix is None:
     return send_error(
       "numero, type et prix requis."
+    ), 400
+  
+  types = [enum_type.name for enum_type in Type]
+  
+  if type not in types:
+    return send_error(
+    f"Type invalide. Les types valides sont: {', '.join(types)}"
     ), 400
   
   if Chambre.query.filter_by(numero=numero).first():
