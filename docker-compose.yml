@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  db:
+    image: "mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "pass"
+      MYSQL_DATABASE: "hotel"
+    volumes:
+      - "./data/mysql:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+
+  web:
+    build: .
+    volumes:
+      - "./src/hotel:/app/src/hotel"
+    ports:
+      - "5001:5000"
