@@ -5,7 +5,7 @@
 ## Installation
 
 1. Cloner le projet
-2. Faire un `docker-compose up --build -d` à la racine du projet
+2. Faire un `docker compose up --build -d` à la racine du projet
 3. Aller dans le container `web` avec `docker exec -it <container_id> bash`
 4. Faire un `cd app/src/hotel` pour se rendre dans le dossier de l'API
 5. Faire un `flask db init`, `flask db migrate`, `flask db upgrade` pour créer les tables dans la base de données
